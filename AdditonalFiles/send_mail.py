@@ -7,22 +7,11 @@ import os
 from email import encoders
 from email.mime.base import MIMEBase
 import pandas as pd
+import AdditonalFiles.sales_trend_table as st
 
-# import Path as dir
-
-import Files.sales_table_data as sales_table
-import Files.yesterday_seen_rx as seenrx
-import Files.emr_table_data as emrdata
-
-
-def send_report(rsm, email):
+def send_report(rsm):
     # import Files.banner as b
     # b.banner(rsm)
-    import AdditonalFiles.generate_raw_data as row_data
-
-    row_data.seen_rx_data()
-    row_data.doctor_call_data()
-    row_data.sales_trend_data()
 
     # ------------ Group email ----------------------------------------
     msgRoot = MIMEMultipart('related')
@@ -120,7 +109,7 @@ def send_report(rsm, email):
             <table>
             <tr><th colspan='5' style=" background-color: #b2ff66; font-size: 20px; "> Sales Trend % </th></tr>
             </table>
-                        <table>""" +  + """</table>
+                        <table>""" + st.Sales_table_data(rsm) + """</table>
     </body>
 
     <br>
@@ -129,7 +118,7 @@ def send_report(rsm, email):
             <table>
             <tr><th colspan='5' style=" background-color: #b2ff66; font-size: 20px; "> Yesterday Seen Rx </th></tr>
             </table>
-                        <table>""" +  + """</table>
+                        <table>""" """</table>
     </body>
 
     <br>
@@ -138,7 +127,7 @@ def send_report(rsm, email):
             <table>
             <tr><th colspan='5' style=" background-color: #b2ff66; font-size: 20px; ">Yesterday EMR SHARE </th></tr>
             </table>
-                        <table>""" +  + """</table>
+                        <table>""" """</table>
     </body>
 
     </br>
@@ -154,7 +143,6 @@ def send_report(rsm, email):
     """, 'html')
 
     msg.attach(msgText)
-
 
     # file_location = r"./Data/EMR_" + str(rsm) + ".xlsx"
     # filename = os.path.basename(file_location)
