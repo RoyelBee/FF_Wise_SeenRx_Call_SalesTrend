@@ -8,6 +8,9 @@ from email import encoders
 from email.mime.base import MIMEBase
 import pandas as pd
 import AdditonalFiles.sales_trend_table as st
+import AdditonalFiles.seen_rx_table as sr
+import AdditonalFiles.doctor_call_table as dc
+
 
 def send_report(rsm):
     # import Files.banner as b
@@ -59,8 +62,7 @@ def send_report(rsm):
 
     # < img src = "cid:img1" >
     msgText = MIMEText("""
-                         
-                    
+                                             
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -105,34 +107,34 @@ def send_report(rsm):
 
     <br>
 
-    <body
-            <table>
-            <tr><th colspan='5' style=" background-color: #b2ff66; font-size: 20px; "> Sales Trend % </th></tr>
-            </table>
-                        <table>""" + st.Sales_table_data(rsm) + """</table>
-    </body>
+    
+        <table>
+        <tr><th colspan='5' style=" background-color: #b2ff66; font-size: 20px; "> Sales Trend % </th></tr>
+        </table>
+                    <table>""" + st.Sales_table_data(rsm) + """</table>
+    
 
     <br>
 
-    <body
-            <table>
-            <tr><th colspan='5' style=" background-color: #b2ff66; font-size: 20px; "> Yesterday Seen Rx </th></tr>
-            </table>
-                        <table>""" """</table>
-    </body>
+ 
+        <table>
+        <tr><th colspan='5' style=" background-color: #b2ff66; font-size: 20px; "> Yesterday Seen Rx </th></tr>
+        </table>
+                <table>""" + sr.seen_rx_table_data(rsm) + """</table>
+ 
 
     <br>
 
-    <body
-            <table>
-            <tr><th colspan='5' style=" background-color: #b2ff66; font-size: 20px; ">Yesterday EMR SHARE </th></tr>
-            </table>
-                        <table>""" """</table>
+   
+        <table>
+        <tr><th colspan='5' style=" background-color: #b2ff66; font-size: 20px; ">Yesterday Doctor Call </th></tr>
+        </table>
+                <table>""" + dc.doctor_call_table_data(rsm) + """</table>
+    
+    </br> </br>
+    
     </body>
-
-    </br>
-
-    </br>
+    
     </html>
     <br><p style="text-align:left;">If there is any inconvenience, you are requested to communicate with the ERP BI Service:<br>
                          <b>(Mobile: 01713-389972, 01713-380502)</b><br><br>
@@ -144,14 +146,35 @@ def send_report(rsm):
 
     msg.attach(msgText)
 
-    # file_location = r"./Data/EMR_" + str(rsm) + ".xlsx"
-    # filename = os.path.basename(file_location)
-    # attachment = open(file_location, "rb")
-    # part_2 = MIMEBase('application', 'octet-stream')
-    # part_2.set_payload(attachment.read())
-    # encoders.encode_base64(part_2)
-    # part_2.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-    # msgRoot.attach(part_2)
+    # # Attached Seen Rx File
+    file_location = r"./Data/SeenRx/SeenRx_" + str(rsm) + ".xlsx"
+    filename = os.path.basename(file_location)
+    attachment = open(file_location, "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msgRoot.attach(part)
+
+    # # Attached Sales Trend File
+    file_location = r"./Data/SalesTrend/SalesTrend_" + str(rsm) + ".xlsx"
+    filename = os.path.basename(file_location)
+    attachment = open(file_location, "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msgRoot.attach(part)
+
+    # # Attached Doctor Call File
+    file_location = r"./Data/Call/Call_" + str(rsm) + ".xlsx"
+    filename = os.path.basename(file_location)
+    attachment = open(file_location, "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msgRoot.attach(part)
 
     # # ----------- Finally send mail and close server connection ---
     server = smtplib.SMTP(email_server_host, port)
