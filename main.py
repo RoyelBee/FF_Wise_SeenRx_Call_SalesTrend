@@ -1,20 +1,29 @@
 import time
 
-# start_time = time.time()
-# import AdditonalFiles.send_mail as mail
-#
-# mail.send_report()
-#
-#
-# end_time = time.time()
-# print('Time Takes = ', end_time - start_time)
+start_time = time.time()
 
-# # Generate all Data set ------------------------
+# # ------------- Generate all Data set ------------------------
 import AdditonalFiles.generate_raw_data as data
 # data.seen_rx_data()
 # data.doctor_call_data()
 # data.sales_trend_data()
 
-import AdditonalFiles.send_mail as mail
+# # --------------------- Send All Data -----------------------
+# import AdditonalFiles.send_all_mail as all_mail
+# all_mail.send_all_report()
 
-mail.send_report("CBU")
+# # ----------- Send Single RSM Mail --------------------------
+import AdditonalFiles.send_rsm_mail as mail
+
+mail.send_report('CBU', 'abul.basher@skf.transcombd.com')  # 'abul.basher@skf.transcombd.com'
+# mail.send_report('CCF')  # 'bijoyskf1980@gmail.com'
+# mail.send_report('CCX', 'shafi.uddin@skf.transcombd.com')  # 'shafi.uddin@skf.transcombd.com'
+# mail.send_report('CNH', 'abu.sayeed@skf.transcombd.com')  # 'abu.sayeed@skf.transcombd.com'
+# mail.send_report('CKJ', 'ahmed.manjur@skf.transcombd.com')  # 'ahmed.manjur@skf.transcombd.com'
+# mail.send_report('CMT', 'mizanur.khan@skf.transcombd.com')  # 'mizanur.khan@skf.transcombd.com'
+# mail.send_report('CRB', 'almamun.abdullah@skf.transcombd.com')  # 'almamun.abdullah@skf.transcombd.com'
+# mail.send_report('CRP', 'sanaullah.khan@skf.transcombd.com')  # 'sanaullah.khan@skf.transcombd.com'
+# mail.send_report('CSB', 'masud.rana@skf.transcombd.com')  # 'masud.rana@skf.transcombd.com'
+# mail.send_report('CMT', 'mizanur.khan@skf.transcombd.com')  # 'mizanur.khan@skf.transcombd.com'
+
+print('Time takes = ', round((time.time() - start_time) / 60, 2), 'Min')

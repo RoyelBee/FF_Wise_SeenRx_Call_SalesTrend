@@ -1,39 +1,73 @@
 import pandas as pd
-import db_connection as conn
+import AdditonalFiles.db_connection as conn
 
 
 def seen_rx_data():
-    seen_rx_data = pd.read_sql_query(""" SELECT [FFTR], [LIGAZID Seen Rx], [EMAZID Seen Rx], [LIPICON Seen Rx],
-    [AGLIP Seen Rx], [CIFIBET Seen Rx], [AMLEVO Seen Rx], [CARDOBIS Seen Rx], [RIVAROX Seen Rx],[Noclog Seen Rx]
+    ## old query
+    # seen_rx_data = pd.read_sql_query(""" SELECT [FFTR], [LIGAZID Seen Rx], [EMAZID Seen Rx], [LIPICON Seen Rx],
+    # [AGLIP Seen Rx], [CIFIBET Seen Rx], [AMLEVO Seen Rx], [CARDOBIS Seen Rx], [RIVAROX Seen Rx],[Noclog Seen Rx]
+    #
+    # FROM (SELECT LEFT(area_id, 4) + '0' AS FFTR,
+    #     COUNT(CASE WHEN medicine_id = 'LIGAZID' THEN doctor_id END) AS [LIGAZID Seen Rx],
+    #     COUNT(CASE WHEN medicine_id = 'EMAZID' THEN doctor_id END) AS [EMAZID Seen Rx],
+    #     COUNT(CASE WHEN medicine_id = 'LIPICON' THEN doctor_id END) AS [LIPICON Seen Rx],
+    #     COUNT(CASE WHEN medicine_id = 'AGLIP' THEN doctor_id END) AS [AGLIP Seen Rx],
+    #     COUNT(CASE WHEN medicine_id = 'CIFIBET' THEN doctor_id END) AS [CIFIBET Seen Rx],
+    #     COUNT(CASE WHEN medicine_id = 'AMLEVO' THEN doctor_id END) AS [AMLEVO Seen Rx],
+    #     COUNT(CASE WHEN medicine_id = 'CARDOBIS' THEN doctor_id END) AS [CARDOBIS Seen Rx],
+    #     COUNT(CASE WHEN medicine_id = 'RIVAROX' THEN doctor_id END) AS [RIVAROX Seen Rx],
+    #     COUNT(CASE WHEN medicine_id = 'Noclog' THEN doctor_id END) AS [Noclog Seen Rx]
+    #     FROM  dbo.sm_prescription_seen_details
+    #     WHERE   (submit_date = DATEADD(day, - 1, CAST(GETDATE() AS date))) AND (LEFT(area_id, 1) = 'C')
+    #     GROUP BY LEFT(area_id, 4) + '0'
+    #     UNION ALL
+    #     SELECT area_id,
+    #         COUNT(CASE WHEN medicine_id = 'LIGAZID' THEN doctor_id END) AS [LIGAZID Seen Rx],
+    #         COUNT(CASE WHEN medicine_id = 'EMAZID' THEN doctor_id END) AS [EMAZID Seen Rx],
+    #         COUNT(CASE WHEN medicine_id = 'LIPICON' THEN doctor_id END) AS [LIPICON Seen Rx],
+    #         COUNT(CASE WHEN medicine_id = 'AGLIP' THEN doctor_id END) AS [AGLIP Seen Rx],
+    #         COUNT(CASE WHEN medicine_id = 'CIFIBET' THEN doctor_id END) AS [CIFIBET Seen Rx],
+    #         COUNT(CASE WHEN medicine_id = 'AMLEVO' THEN doctor_id END) AS [AMLEVO Seen Rx],
+    #         COUNT(CASE WHEN medicine_id = 'CARDOBIS' THEN doctor_id END) AS [CARDOBIS Seen Rx],
+    #         COUNT(CASE WHEN medicine_id = 'RIVAROX' THEN doctor_id END) AS [RIVAROX Seen Rx],
+    #         COUNT(CASE WHEN medicine_id = 'Noclog' THEN doctor_id END) AS [Noclog Seen Rx]
+    #     FROM     dbo.sm_prescription_seen_details AS sm_prescription_seen_details_1
+    #     WHERE  (submit_date = DATEADD(day, - 1, CAST(GETDATE() AS date))) AND (LEFT(area_id, 1) = 'C')
+    #     GROUP BY area_id) AS FF_SeenRx """, conn.m_reporting)
 
-    FROM (SELECT LEFT(area_id, 4) + '0' AS FFTR,
-        COUNT(CASE WHEN medicine_id = 'LIGAZID' THEN doctor_id END) AS [LIGAZID Seen Rx],
-        COUNT(CASE WHEN medicine_id = 'EMAZID' THEN doctor_id END) AS [EMAZID Seen Rx],
-        COUNT(CASE WHEN medicine_id = 'LIPICON' THEN doctor_id END) AS [LIPICON Seen Rx],
-        COUNT(CASE WHEN medicine_id = 'AGLIP' THEN doctor_id END) AS [AGLIP Seen Rx],
-        COUNT(CASE WHEN medicine_id = 'CIFIBET' THEN doctor_id END) AS [CIFIBET Seen Rx],
-        COUNT(CASE WHEN medicine_id = 'AMLEVO' THEN doctor_id END) AS [AMLEVO Seen Rx],
-        COUNT(CASE WHEN medicine_id = 'CARDOBIS' THEN doctor_id END) AS [CARDOBIS Seen Rx],
-        COUNT(CASE WHEN medicine_id = 'RIVAROX' THEN doctor_id END) AS [RIVAROX Seen Rx],
-        COUNT(CASE WHEN medicine_id = 'Noclog' THEN doctor_id END) AS [Noclog Seen Rx]
-        FROM  dbo.sm_prescription_seen_details
-        WHERE   (submit_date = DATEADD(day, - 1, CAST(GETDATE() AS date))) AND (LEFT(area_id, 1) = 'C')
-        GROUP BY LEFT(area_id, 4) + '0'
-        UNION ALL
-        SELECT area_id,
-            COUNT(CASE WHEN medicine_id = 'LIGAZID' THEN doctor_id END) AS [LIGAZID Seen Rx],
-            COUNT(CASE WHEN medicine_id = 'EMAZID' THEN doctor_id END) AS [EMAZID Seen Rx],
-            COUNT(CASE WHEN medicine_id = 'LIPICON' THEN doctor_id END) AS [LIPICON Seen Rx],
-            COUNT(CASE WHEN medicine_id = 'AGLIP' THEN doctor_id END) AS [AGLIP Seen Rx],
-            COUNT(CASE WHEN medicine_id = 'CIFIBET' THEN doctor_id END) AS [CIFIBET Seen Rx],
-            COUNT(CASE WHEN medicine_id = 'AMLEVO' THEN doctor_id END) AS [AMLEVO Seen Rx],
-            COUNT(CASE WHEN medicine_id = 'CARDOBIS' THEN doctor_id END) AS [CARDOBIS Seen Rx],
-            COUNT(CASE WHEN medicine_id = 'RIVAROX' THEN doctor_id END) AS [RIVAROX Seen Rx],
-            COUNT(CASE WHEN medicine_id = 'Noclog' THEN doctor_id END) AS [Noclog Seen Rx]
-        FROM     dbo.sm_prescription_seen_details AS sm_prescription_seen_details_1
-        WHERE  (submit_date = DATEADD(day, - 1, CAST(GETDATE() AS date))) AND (LEFT(area_id, 1) = 'C')
-        GROUP BY area_id) AS FF_SeenRx """, conn.m_reporting)
-    seen_rx_data.to_excel("./Data/SeenRx/Seen_Rx_Data.xlsx", index=False)
+    new_seen_rx_data = pd.read_sql_query(""" select * from
+            (Select
+            left([FF ID],3) as [FFTR],
+            isnull(sum([LIGAZID Seen Rx]),0)  as [LIGAZID],
+            isnull(sum([EMAZID Seen Rx]),0) as [EMAZID],
+            isnull(sum([LIPICON Seen Rx]),0) as [LIPICON],
+            isnull(sum([AGLIP Seen Rx]),0) as [AGLIP],
+            isnull(sum([CIFIBET Seen Rx]),0) as [CIFIBET],
+            isnull(sum([AMLEVO Seen Rx]),0) as [AMLEVO],
+            isnull(sum([CARDOBIS Seen Rx]),0) as [CARDOBIS],
+            isnull(sum([RIVAROX Seen Rx]),0) as [RIVAROX],
+            isnull(sum([NOCLOG Seen Rx]),0) as [NOCLOG]
+            from v_LastDay_SeenRx 
+            where [FF ID]  = left([FF ID],4)+'0' --and left([FF ID],3) like '%CBU%'
+            group by left([FF ID],3)
+                                        
+            union all
+                                        
+            Select [FF ID],
+            isnull([LIGAZID Seen Rx],0) as [LIGAZID Seen Rx],
+            isnull([EMAZID Seen Rx],0) as [EMAZID Seen Rx],
+            ISNULL([LIPICON Seen Rx], 0) as [LIPICON Seen Rx],
+            ISNULL([AGLIP Seen Rx], 0) as [AGLIP Seen Rx],
+            ISNULL([CIFIBET Seen Rx], 0) as [CIFIBET Seen Rx],
+            ISNULL([AMLEVO Seen Rx], 0) as [AMLEVO Seen Rx],
+            ISNULL([CARDOBIS Seen Rx], 0) as [CARDOBIS Seen Rx],
+            ISNULL([RIVAROX Seen Rx], 0) as [RIVAROX Seen Rx],
+            ISNULL([NOCLOG Seen Rx], 0) as [NOCLOG Seen Rx]
+            from v_LastDay_SeenRx --where  left([FF ID],3) like '%CBU%'
+                                        
+            ) as T1
+            order by [FFTR] asc """, conn.m_reporting)
+    new_seen_rx_data.to_excel("./Data/SeenRx/Seen_Rx_Data.xlsx", index=False)
 
     data = pd.read_excel('./Data/SeenRx/Seen_Rx_Data.xlsx')
 
@@ -166,8 +200,8 @@ def sales_trend_data():
     group by FFTarget.FFTR
     ) as T1 
     order by FFTR asc """, conn.azure)
-    sales_trend_data.to_excel("./Data/SalesTrend/sales_trend_data.xlsx", index=False)
 
+    sales_trend_data.to_excel("./Data/SalesTrend/sales_trend_data.xlsx", index=False)
     data = pd.read_excel('./Data/SalesTrend/sales_trend_data.xlsx')
 
     CBU = data[data['FFTR'].str.contains('CBU')]
