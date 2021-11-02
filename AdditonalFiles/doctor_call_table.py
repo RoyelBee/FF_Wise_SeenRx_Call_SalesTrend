@@ -27,16 +27,16 @@ def doctor_call_table_data(rsm):
 
         for j in range(1, 2):
             td = td + "<td id=\"idcol\" style=\"background-color:" + \
-                 str(fn.warning(str((sh.cell_value(i, 0))))) + "\">" + str((sh.cell_value(i, j))) + '%' + "</td>\n"
+                 str(fn.warning(str((sh.cell_value(i, 0))))) + "\">" + str(int((sh.cell_value(i, j)))) + "</td>\n"
         for j in range(2, 3, sh.ncols):
             td = td + "<td id=\"idcol\" style=\"background-color:" + \
-                 str(fn.warning(str((sh.cell_value(i, 0))))) + "\">" + str((sh.cell_value(i, j))) + '%' + "</td>\n"
+                 str(fn.warning(str((sh.cell_value(i, 0))))) + "\">" + str(int((sh.cell_value(i, j)))) + "</td>\n"
         for j in range(3, 4, sh.ncols):
             td = td + "<td id=\"idcol\" style=\"background-color:" + \
-                 str(fn.warning(str((sh.cell_value(i, 0))))) + "\">" + str((sh.cell_value(i, j))) + '%' + "</td>\n"
+                 str(fn.warning(str((sh.cell_value(i, 0))))) + "\">" + str(int((sh.cell_value(i, j)))) + "</td>\n"
         for j in range(4, sh.ncols):
             td = td + "<td id=\"idcol\" style=\"background-color:" + \
-                 str(fn.warning(str((sh.cell_value(i, 0))))) + "\">" + str((sh.cell_value(i, j))) + '%' + "</td>\n"
+                 str(fn.warning(str((sh.cell_value(i, 0))))) + "\">" + str(int((sh.cell_value(i, j)))) + "</td>\n"
         td = td + "</tr>\n"
     html = th + td
     return html

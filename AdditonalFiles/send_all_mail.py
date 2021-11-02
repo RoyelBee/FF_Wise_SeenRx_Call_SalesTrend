@@ -114,34 +114,33 @@ def send_all_report():
         <img src = "cid:img1" width="900"> 
 
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; "> Sales Trend % </th></tr>
+        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">All: Sales Trend % </th></tr>
         
                 """ + st.all_Sales_table_data() + """</table>
-    <br>
-
+        <br>
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; "> Yesterday Seen Rx </th></tr>
+        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">All: Yesterday Seen Rx </th></tr>
         
                 """ + sr.all_seen_rx_table_data() + """</table>
-    <br>
+        <br>
 
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">Yesterday Doctor Call </th></tr>
+        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">All: Yesterday Doctor Call </th></tr>
        
                 """ + dc.all_doctor_call_table_data() + """</table>
 
-    </br> </br>
-
-    </body>
-
-    </html>
-    <br><p style="text-align:left;">If there is any inconvenience, you are requested to communicate with the ERP BI Service:<br>
-                         <b>(Mobile: 01713-389972, 01713-380502)</b><br><br>
-                         <b>Regards</b><br>
-                         <b>ERP BI Service</b><br>
-                         <b>Information System Automation (ISA)</b><br><br>
-                         <p style="color:blue">****This is a system generated report ****</p>
-    """, 'html')
+        </br> </br>
+    
+        </body>
+    
+        </html>
+        <br><p style="text-align:left;">If there is any inconvenience, you are requested to communicate with the ERP BI Service:<br>
+                             <b>(Mobile: 01713-389972, 01713-380502)</b><br><br>
+                             <b>Regards</b><br>
+                             <b>ERP BI Service</b><br>
+                             <b>Information System Automation (ISA)</b><br><br>
+                             <p style="color:blue">****This is a system generated report ****</p>
+        """, 'html')
 
     msg.attach(msgText)
 

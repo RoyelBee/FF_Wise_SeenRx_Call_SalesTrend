@@ -19,17 +19,13 @@ def banner(rsm):
     time = datetime_BD.strftime("%I:%M %p")
 
     img = Image.open("./Images/Banner/new_ai.png")
-    title = ImageDraw.Draw(img)
     timestore = ImageDraw.Draw(img)
-    tag = ImageDraw.Draw(img)
     branch = ImageDraw.Draw(img)
     font = ImageFont.truetype("./Font/Stencil_Regular.ttf", 35, encoding="unic")
     font1 = ImageFont.truetype("./Font/ROCK.ttf", 35, encoding="unic")
     font2 = ImageFont.truetype("./Font/ROCK.ttf", 18, encoding="unic")
     report_name = ''
-    #
-    # tag.text((18, 8), 'SK+F', (255, 255, 255), font=font)
-    branch.text((25, 130), report_name + "Turkish Performance - All", (255, 209, 0), font=font1)
+    branch.text((25, 130), report_name + "Turkish Performance - "+str(rsm), (255, 209, 0), font=font1)
     timestore.text((25, 175), "Upto " + day + "," + time, (255, 255, 255), font=font2)
     img.save("./Images/Banner/banner_ai_"+str(rsm)+".png")
 

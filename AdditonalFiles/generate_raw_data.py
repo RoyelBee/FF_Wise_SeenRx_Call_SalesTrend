@@ -3,38 +3,6 @@ import AdditonalFiles.db_connection as conn
 
 
 def seen_rx_data():
-    ## old query
-    # seen_rx_data = pd.read_sql_query(""" SELECT [FFTR], [LIGAZID Seen Rx], [EMAZID Seen Rx], [LIPICON Seen Rx],
-    # [AGLIP Seen Rx], [CIFIBET Seen Rx], [AMLEVO Seen Rx], [CARDOBIS Seen Rx], [RIVAROX Seen Rx],[Noclog Seen Rx]
-    #
-    # FROM (SELECT LEFT(area_id, 4) + '0' AS FFTR,
-    #     COUNT(CASE WHEN medicine_id = 'LIGAZID' THEN doctor_id END) AS [LIGAZID Seen Rx],
-    #     COUNT(CASE WHEN medicine_id = 'EMAZID' THEN doctor_id END) AS [EMAZID Seen Rx],
-    #     COUNT(CASE WHEN medicine_id = 'LIPICON' THEN doctor_id END) AS [LIPICON Seen Rx],
-    #     COUNT(CASE WHEN medicine_id = 'AGLIP' THEN doctor_id END) AS [AGLIP Seen Rx],
-    #     COUNT(CASE WHEN medicine_id = 'CIFIBET' THEN doctor_id END) AS [CIFIBET Seen Rx],
-    #     COUNT(CASE WHEN medicine_id = 'AMLEVO' THEN doctor_id END) AS [AMLEVO Seen Rx],
-    #     COUNT(CASE WHEN medicine_id = 'CARDOBIS' THEN doctor_id END) AS [CARDOBIS Seen Rx],
-    #     COUNT(CASE WHEN medicine_id = 'RIVAROX' THEN doctor_id END) AS [RIVAROX Seen Rx],
-    #     COUNT(CASE WHEN medicine_id = 'Noclog' THEN doctor_id END) AS [Noclog Seen Rx]
-    #     FROM  dbo.sm_prescription_seen_details
-    #     WHERE   (submit_date = DATEADD(day, - 1, CAST(GETDATE() AS date))) AND (LEFT(area_id, 1) = 'C')
-    #     GROUP BY LEFT(area_id, 4) + '0'
-    #     UNION ALL
-    #     SELECT area_id,
-    #         COUNT(CASE WHEN medicine_id = 'LIGAZID' THEN doctor_id END) AS [LIGAZID Seen Rx],
-    #         COUNT(CASE WHEN medicine_id = 'EMAZID' THEN doctor_id END) AS [EMAZID Seen Rx],
-    #         COUNT(CASE WHEN medicine_id = 'LIPICON' THEN doctor_id END) AS [LIPICON Seen Rx],
-    #         COUNT(CASE WHEN medicine_id = 'AGLIP' THEN doctor_id END) AS [AGLIP Seen Rx],
-    #         COUNT(CASE WHEN medicine_id = 'CIFIBET' THEN doctor_id END) AS [CIFIBET Seen Rx],
-    #         COUNT(CASE WHEN medicine_id = 'AMLEVO' THEN doctor_id END) AS [AMLEVO Seen Rx],
-    #         COUNT(CASE WHEN medicine_id = 'CARDOBIS' THEN doctor_id END) AS [CARDOBIS Seen Rx],
-    #         COUNT(CASE WHEN medicine_id = 'RIVAROX' THEN doctor_id END) AS [RIVAROX Seen Rx],
-    #         COUNT(CASE WHEN medicine_id = 'Noclog' THEN doctor_id END) AS [Noclog Seen Rx]
-    #     FROM     dbo.sm_prescription_seen_details AS sm_prescription_seen_details_1
-    #     WHERE  (submit_date = DATEADD(day, - 1, CAST(GETDATE() AS date))) AND (LEFT(area_id, 1) = 'C')
-    #     GROUP BY area_id) AS FF_SeenRx """, conn.m_reporting)
-
     new_seen_rx_data = pd.read_sql_query(""" select * from
             (Select
             left([FF ID],3) as [FFTR],
@@ -93,28 +61,47 @@ def seen_rx_data():
     CRB.to_excel('./Data/SeenRx/SeenRx_CRB.xlsx', index=False)
 
     CRP = data[data['FFTR'].str.contains('CRP')]
-    CRP.to_excel('./Data/SeenRx_CRP.xlsx', index=False)
+    CRP.to_excel('./Data/SeenRx/SeenRx_CRP.xlsx', index=False)
 
     CSB = data[data['FFTR'].str.contains('CSB')]
     CSB.to_excel('./Data/SeenRx/SeenRx_CSB.xlsx', index=False)
-    print('1. Seen Rx Data Saved')
+    print('2. Seen Rx Data Saved')
 
 
 def doctor_call_data():
-    doctor_call_data = pd.read_sql_query(""" SELECT  RTRIM(route_id) AS FFTR,
-    COUNT( distinct CASE WHEN RTRIM(BRAND) = 'LIGAZID' THEN visit_sl END) AS [LIGAZID Call],
-    COUNT( distinct CASE WHEN RTRIM(BRAND) = 'EMAZID' THEN visit_sl END) AS [EMAZID Call],
-    COUNT( distinct CASE WHEN RTRIM(BRAND) = 'LIPICON' THEN visit_sl END) AS [LIPICON Call],
-    COUNT( distinct CASE WHEN RTRIM(BRAND) = 'AGLIP' THEN visit_sl END) AS [AGLIP Call],
-    COUNT( distinct CASE WHEN RTRIM(BRAND) = 'CIFIBET' THEN visit_sl END) AS [CIFIBET Call],
-    COUNT( distinct CASE WHEN RTRIM(BRAND) = 'AMLEVO' THEN visit_sl END) AS [AMLEVO Call],
-    COUNT( distinct CASE WHEN RTRIM(BRAND) = 'CARDOBIS' THEN visit_sl END) AS [CARDOBIS Call],
-    COUNT( distinct CASE WHEN RTRIM(BRAND) = 'RIVAROX' THEN visit_sl END) AS [RIVAROX Call],
-    COUNT( distinct CASE WHEN RTRIM(BRAND) = 'Noclog' THEN visit_sl END) AS [Noclog Call]
-    FROM    dbo.drBrandEffectiveCall
-    WHERE    visit_date = DATEADD(day, - 1, CAST(GETDATE() AS date))
-    group by RTRIM(route_id)
-    order by FFTR asc """, conn.m_reporting)
+    doctor_call_data = pd.read_sql_query(""" 
+        select * from
+        (Select
+        left([FF ID],3) as [FFTR],
+        isnull(sum([LIGAZID Call]),0)  as [LIGAZID],
+        isnull(sum([EMAZID Call]),0) as [EMAZID],
+        isnull(sum([LIPICON Call]),0) as [LIPICON],
+        isnull(sum([AGLIP Call]),0) as [AGLIP],
+        isnull(sum([CIFIBET Call]),0) as [CIFIBET],
+        isnull(sum([AMLEVO Call]),0) as [AMLEVO],
+        isnull(sum([CARDOBIS Call]),0) as [CARDOBIS],
+        isnull(sum([RIVAROX Call]),0) as [RIVAROX],
+        isnull(sum([NOCLOG Call]),0) as [NOCLOG]
+        from [V_LastDayDoctorCall] 
+        where [FF ID]  = left([FF ID],4)+'0'
+        group by left([FF ID],3)
+                                                
+        union all
+                                                
+        Select [FF ID],
+        isnull([LIGAZID Call],0) as [LIGAZID Call],
+        isnull([EMAZID Call],0) as [EMAZID Call],
+        ISNULL([LIPICON Call], 0) as [LIPICON Call],
+        ISNULL([AGLIP Call], 0) as [AGLIP Call],
+        ISNULL([CIFIBET Call], 0) as [CIFIBET Call],
+        ISNULL([AMLEVO Call], 0) as [AMLEVO Call],
+        ISNULL([CARDOBIS Call], 0) as [CARDOBIS Call],
+        ISNULL([RIVAROX Call], 0) as [RIVAROX Call],
+        ISNULL([NOCLOG Call], 0) as [NOCLOG Call]
+        from [V_LastDayDoctorCall] 
+                                                
+        ) as T1
+        order by [FFTR] asc """, conn.m_reporting)
     doctor_call_data.to_excel("./Data/Call/doctor_call_data.xlsx", index=False)
 
     data = pd.read_excel('./Data/Call/doctor_call_data.xlsx')
@@ -141,12 +128,12 @@ def doctor_call_data():
     CRB.to_excel('./Data/Call/Call_CRB.xlsx', index=False)
 
     CRP = data[data['FFTR'].str.contains('CRP')]
-    CRP.to_excel('./Data/Call_CRP.xlsx', index=False)
+    CRP.to_excel('./Data/Call/Call_CRP.xlsx', index=False)
 
     CSB = data[data['FFTR'].str.contains('CSB')]
     CSB.to_excel('./Data/Call/Call_CSB.xlsx', index=False)
 
-    print('2. Doctor Call Data Saved')
+    print('3. Doctor Call Data Saved')
 
 
 def sales_trend_data():
@@ -226,9 +213,9 @@ def sales_trend_data():
     CRB.to_excel('./Data/SalesTrend/SalesTrend_CRB.xlsx', index=False)
 
     CRP = data[data['FFTR'].str.contains('CRP')]
-    CRP.to_excel('./Data/SalesTrend_CRP.xlsx', index=False)
+    CRP.to_excel('./Data/SalesTrend/SalesTrend_CRP.xlsx', index=False)
 
     CSB = data[data['FFTR'].str.contains('CSB')]
     CSB.to_excel('./Data/SalesTrend/SalesTrend_CSB.xlsx', index=False)
 
-    print('3. Sales Trend Data Saved')
+    print('1. Sales Trend Data Saved')

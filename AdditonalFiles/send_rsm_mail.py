@@ -12,7 +12,8 @@ import AdditonalFiles.banner as b
 import AdditonalFiles.sales_trend_table as st
 import AdditonalFiles.seen_rx_table as sr
 import AdditonalFiles.doctor_call_table as dc
-import AdditonalFiles.all_kpi_image as kpi 
+import AdditonalFiles.all_kpi_image as kpi
+
 
 def send_report(rsm, email):
     b.banner(rsm)
@@ -56,12 +57,10 @@ def send_report(rsm, email):
     img1.add_header('Content-ID', '<img1>')
     msgRoot.attach(img1)
     # # KPI Image
-    kpi_img = open("./Images/kpi_image_"+str(rsm)+".png", 'rb')
+    kpi_img = open("./Images/kpi_image_" + str(rsm) + ".png", 'rb')
     kpi_img = MIMEImage(kpi_img.read())
     kpi_img.add_header('Content-ID', '<kpi_img>')
     msgRoot.attach(kpi_img)
-
-
 
     msgText = MIMEText("""
                                              
@@ -112,19 +111,21 @@ def send_report(rsm, email):
         <img src = "cid:kpi_img" width="900"> 
 
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; "> Sales Trend % </th></tr>
+        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">""" + str(rsm) + """: Sales Trend % 
+        </th></tr>
         
                """ + st.Sales_table_data(rsm) + """</table>
     <br>
 
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; "> Yesterday Seen Rx </th></tr>
+        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">""" + str(rsm) + """: Yesterday Seen Rx </th></tr>
         
             """ + sr.seen_rx_table_data(rsm) + """</table>
     <br>
 
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">Yesterday Doctor Call </th></tr>
+        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">""" + str(rsm) + """: Yesterday 
+        Doctor Call </th></tr>
         """ + dc.doctor_call_table_data(rsm) + """</table>
     
     </br> </br>
@@ -142,35 +143,35 @@ def send_report(rsm, email):
 
     msg.attach(msgText)
 
-    # # # Attached Seen Rx File
-    # file_location = r"./Data/SeenRx/SeenRx_" + str(rsm) + ".xlsx"
-    # filename = os.path.basename(file_location)
-    # attachment = open(file_location, "rb")
-    # part = MIMEBase('application', 'octet-stream')
-    # part.set_payload(attachment.read())
-    # encoders.encode_base64(part)
-    # part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-    # msgRoot.attach(part)
-    #
-    # # # Attached Sales Trend File
-    # file_location = r"./Data/SalesTrend/SalesTrend_" + str(rsm) + ".xlsx"
-    # filename = os.path.basename(file_location)
-    # attachment = open(file_location, "rb")
-    # part = MIMEBase('application', 'octet-stream')
-    # part.set_payload(attachment.read())
-    # encoders.encode_base64(part)
-    # part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-    # msgRoot.attach(part)
-    #
-    # # # Attached Doctor Call File
-    # file_location = r"./Data/Call/Call_" + str(rsm) + ".xlsx"
-    # filename = os.path.basename(file_location)
-    # attachment = open(file_location, "rb")
-    # part = MIMEBase('application', 'octet-stream')
-    # part.set_payload(attachment.read())
-    # encoders.encode_base64(part)
-    # part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-    # msgRoot.attach(part)
+    # # Attached Seen Rx File
+    file_location = r"./Data/SeenRx/SeenRx_" + str(rsm) + ".xlsx"
+    filename = os.path.basename(file_location)
+    attachment = open(file_location, "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msgRoot.attach(part)
+
+    # # Attached Sales Trend File
+    file_location = r"./Data/SalesTrend/SalesTrend_" + str(rsm) + ".xlsx"
+    filename = os.path.basename(file_location)
+    attachment = open(file_location, "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msgRoot.attach(part)
+
+    # # Attached Doctor Call File
+    file_location = r"./Data/Call/Call_" + str(rsm) + ".xlsx"
+    filename = os.path.basename(file_location)
+    attachment = open(file_location, "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msgRoot.attach(part)
 
     # # ----------- Finally send mail and close server connection ---
     server = smtplib.SMTP(email_server_host, port)
