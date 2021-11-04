@@ -22,16 +22,23 @@ def send_all_report():
     # ------------ Group email ----------------------------------------
     msgRoot = MIMEMultipart('related')
     me = 'erp-bi.service@transcombd.com'
+    email = 'rejaul.islam@transcombd.com'
 
     # to = [email, '']
-    # cc = ['tafsir.bashar@skf.transcombd.com', '']
-    # bcc = ['yakub@transcombd.com', 'rejaul.islam@transcombd.com']
+    # cc = ['', '']
+    # bcc = ['', '']
 
     # #  --------  For testing purpose mail --------------
-    email = 'rejaul.islam@transcombd.com'
-    to = [email, '']
+
+    to = ['absiddique@skf.transcombd.com', 'khalid@skf.transcombd.com', 'mohammad.nasir@skf.transcombd.com',
+          'masrahman@skf.transcombd.com', 'rafiqul@skf.transcombd.com',
+          'dona.roy@skf.transcombd.com', 'm.shazzadul@skf.transcombd.com',
+          'mridul.baidya@skf.transcombd.com',
+          'obaydur@skf.transcombd.com', 'tafsir.bashar@skf.transcombd.com', 'hasan.imam@skf.transcombd.com']
+
     cc = ['', '']
-    bcc = ['', '']
+    bcc = ['yakub@transcombd.com', 'zubair@transcombd.com', 'rejaul.islam@transcombd.com']
+
 
     recipient = to + cc + bcc
     print('mail Sending to = ', email)
@@ -144,35 +151,35 @@ def send_all_report():
 
     msg.attach(msgText)
 
-    # # # Attached Seen Rx File
-    # file_location = r"./Data/SeenRx/Seen_Rx_Data.xlsx"
-    # filename = os.path.basename(file_location)
-    # attachment = open(file_location, "rb")
-    # part = MIMEBase('application', 'octet-stream')
-    # part.set_payload(attachment.read())
-    # encoders.encode_base64(part)
-    # part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-    # msgRoot.attach(part)
-    #
-    # # # Attached Sales Trend File
-    # file_location = r"./Data/SalesTrend/sales_trend_data.xlsx"
-    # filename = os.path.basename(file_location)
-    # attachment = open(file_location, "rb")
-    # part = MIMEBase('application', 'octet-stream')
-    # part.set_payload(attachment.read())
-    # encoders.encode_base64(part)
-    # part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-    # msgRoot.attach(part)
-    #
-    # # # Attached Doctor Call File
-    # file_location = r"./Data/Call/doctor_call_data.xlsx"
-    # filename = os.path.basename(file_location)
-    # attachment = open(file_location, "rb")
-    # part = MIMEBase('application', 'octet-stream')
-    # part.set_payload(attachment.read())
-    # encoders.encode_base64(part)
-    # part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-    # msgRoot.attach(part)
+    # # Attached Seen Rx File
+    file_location = r"./Data/SeenRx/Seen_Rx_Data.xlsx"
+    filename = os.path.basename(file_location)
+    attachment = open(file_location, "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msgRoot.attach(part)
+
+    # # Attached Sales Trend File
+    file_location = r"./Data/SalesTrend/sales_trend_data.xlsx"
+    filename = os.path.basename(file_location)
+    attachment = open(file_location, "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msgRoot.attach(part)
+
+    # # Attached Doctor Call File
+    file_location = r"./Data/Call/doctor_call_data.xlsx"
+    filename = os.path.basename(file_location)
+    attachment = open(file_location, "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msgRoot.attach(part)
 
     # # ----------- Finally send mail and close server connection ---
     server = smtplib.SMTP(email_server_host, port)

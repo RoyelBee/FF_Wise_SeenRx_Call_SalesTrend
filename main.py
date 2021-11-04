@@ -5,9 +5,9 @@ start_time = time.time()
 # # ------------- Generate all Data set ------------------------
 import AdditonalFiles.generate_raw_data as data
 
-data.sales_trend_data()
-data.seen_rx_data()
-data.doctor_call_data()
+# data.sales_trend_data()
+# data.seen_rx_data()
+# data.doctor_call_data()
 
 # # --------------------- Send All Data -----------------------
 import AdditonalFiles.send_all_mail as all_mail

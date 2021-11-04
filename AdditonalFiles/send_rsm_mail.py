@@ -21,16 +21,16 @@ def send_report(rsm, email):
     # ------------ Group email ----------------------------------------
     msgRoot = MIMEMultipart('related')
     me = 'erp-bi.service@transcombd.com'
-
-    # to = [email, '']
-    # cc = ['tafsir.bashar@skf.transcombd.com', '']
-    # bcc = ['yakub@transcombd.com', 'rejaul.islam@transcombd.com']
-
     # #  --------  For testing purpose mail --------------
-    email = 'rejaul.islam@transcombd.com'
+    # email = 'rejaul.islam@transcombd.com'
+    # to = [email, '']
+    # cc = ['', '']
+    # bcc = ['', '']
+
+    # # ------------- Final Mail -----------------
     to = [email, '']
-    cc = ['', '']
-    bcc = ['', '']
+    cc = ['khalid@skf.transcombd.com', 'tafsir.bashar@skf.transcombd.com', 'mohammad.nasir@skf.transcombd.com']
+    bcc = ['yakub@transcombd.com', 'rejaul.islam@transcombd.com']
 
     recipient = to + cc + bcc
     print('mail Sending to = ', email)
