@@ -6,7 +6,6 @@ from email.mime.text import MIMEText
 import os
 from email import encoders
 from email.mime.base import MIMEBase
-import pandas as pd
 
 import AdditonalFiles.banner as bb
 import AdditonalFiles.sales_trend_table as st
@@ -15,35 +14,38 @@ import AdditonalFiles.doctor_call_table as dc
 
 
 def send_all_report():
-    bb.all_banner()
-    #
-    # import AdditonalFiles.all_kpi_image as all_kpi
-    # all_kpi.all_kpi_images()
+    bb.all_banner()  # # 1
+    import AdditonalFiles.all_kpi_image as all_kpi
+    import AdditonalFiles.separate_all_total_data as total
+    total.seperate_total_data()
+    all_kpi.create_total_kpi()  # # 2
+    all_kpi.all_kpi_images()  # # 3
+
     # ------------ Group email ----------------------------------------
     msgRoot = MIMEMultipart('related')
     me = 'erp-bi.service@transcombd.com'
-    email = 'rejaul.islam@transcombd.com'
 
-    # to = [email, '']
-    # cc = ['', '']
-    # bcc = ['', '']
-
-    # #  --------  For testing purpose mail --------------
-
-    to = ['absiddique@skf.transcombd.com', 'khalid@skf.transcombd.com', 'mohammad.nasir@skf.transcombd.com',
-          'masrahman@skf.transcombd.com', 'rafiqul@skf.transcombd.com',
-          'dona.roy@skf.transcombd.com', 'm.shazzadul@skf.transcombd.com',
-          'mridul.baidya@skf.transcombd.com',
-          'obaydur@skf.transcombd.com', 'tafsir.bashar@skf.transcombd.com', 'hasan.imam@skf.transcombd.com']
-
+    to = ['', 'rejaul.islam@transcombd.com']
     cc = ['', '']
-    bcc = ['yakub@transcombd.com', 'zubair@transcombd.com', 'rejaul.islam@transcombd.com']
+    bcc = ['', '']
 
+    # to = ['', 'tafsir.bashar@skf.transcombd.com']
+    # cc = ['', '']
+    # bcc = ['yakub@transcombd.com', 'rejaul.islam@transcombd.com']
+    #
+    # #  --------  For testing purpose mail All  ---------------------------
+    # to = ['absiddique@skf.transcombd.com', 'khalid@skf.transcombd.com', 'mohammad.nasir@skf.transcombd.com',
+    #       'masrahman@skf.transcombd.com', 'rafiqul@skf.transcombd.com',
+    #       'dona.roy@skf.transcombd.com', 'm.shazzadul@skf.transcombd.com',
+    #       'mridul.baidya@skf.transcombd.com',
+    #       'obaydur@skf.transcombd.com', 'tafsir.bashar@skf.transcombd.com', 'hasan.imam@skf.transcombd.com']
+    # cc = ['', '']
+    # bcc = ['yakub@transcombd.com', 'tawhid@transcombd.com', 'zubair@transcombd.com', 'rejaul.islam@transcombd.com']
 
     recipient = to + cc + bcc
-    print('mail Sending to = ', email)
+    # print('mail Sending to = ', email)
 
-    subject = "SK+F Turkish Performance"
+    subject = "United Brand Performance"
 
     email_server_host = 'mail.transcombd.com'
     port = 25
@@ -64,6 +66,12 @@ def send_all_report():
     b.close()
     banner.add_header('Content-ID', '<banner>')
     msgRoot.attach(banner)
+
+    # # All KPI
+    total_kpi = open("./Images/total_kpi_images.png", 'rb')
+    total_kpi = MIMEImage(total_kpi.read())
+    total_kpi.add_header('Content-ID', '<total_kpi>')
+    msgRoot.attach(total_kpi)
 
     # # KPI Image
     img = open("./Images/all_kpi_image.png", 'rb')
@@ -117,22 +125,30 @@ def send_all_report():
     </head>
 
     <br>
+    
         <img src="cid:banner" width="900"> 
+        <img src="cid:total_kpi" width="900"> 
         <img src = "cid:img1" width="900"> 
 
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">All: Sales Trend % </th></tr>
+          <tr><th colspan='13' style=" background-color: #b2ff66; font-size: 20px; ">All: Sales Achievement % </th></tr>
         
-                """ + st.all_Sales_table_data() + """</table>
+                """ + st.all_Sales_achiv_data() + """</table>
+        <br>
+        
+        <table style="width:900px">
+        <tr><th colspan='13' style=" background-color: #b2ff66; font-size: 20px; ">All: Sales Trend % </th></tr>
+        
+                """ + st.all_Sales_trend_table_data() + """</table>
         <br>
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">All: Yesterday Seen Rx </th></tr>
+        <tr><th colspan='13' style=" background-color: #b2ff66; font-size: 20px; ">All: Yesterday Seen Rx </th></tr>
         
                 """ + sr.all_seen_rx_table_data() + """</table>
         <br>
 
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">All: Yesterday Doctor Call </th></tr>
+        <tr><th colspan='13' style=" background-color: #b2ff66; font-size: 20px; ">All: Yesterday Doctor Call </th></tr>
        
                 """ + dc.all_doctor_call_table_data() + """</table>
 
@@ -186,4 +202,4 @@ def send_all_report():
     server.ehlo()
     server.sendmail(me, recipient, msgRoot.as_string())
     server.close()
-    print('Mail Send -------- \n')
+    print('Mail Send')

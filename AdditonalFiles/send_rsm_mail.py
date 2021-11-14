@@ -16,26 +16,35 @@ import AdditonalFiles.all_kpi_image as kpi
 
 
 def send_report(rsm, email):
-    b.banner(rsm)
-    kpi.kpi_image(rsm)
+    print('---------------------------------\nReport Generating for =', rsm)
+    b.banner(rsm)  # # 1
+
+    import AdditonalFiles.all_kpi_image as all_kpi
+    all_kpi.create_rsm_total_kpi(rsm)  # # 2
+
+    kpi.rsm_kpi_image(rsm)
     # ------------ Group email ----------------------------------------
     msgRoot = MIMEMultipart('related')
     me = 'erp-bi.service@transcombd.com'
     # #  --------  For testing purpose mail --------------
-    # email = 'rejaul.islam@transcombd.com'
-    # to = [email, '']
+    email = 'rejaul.islam@transcombd.com'
+    to = [email, '']
+    cc = ['', '']
+    bcc = ['', '']
+
+    # to = ['', 'tafsir.bashar@skf.transcombd.com']
     # cc = ['', '']
-    # bcc = ['', '']
+    # bcc = ['yakub@transcombd.com', 'rejaul.islam@transcombd.com']
 
     # # ------------- Final Mail -----------------
-    to = [email, '']
-    cc = ['khalid@skf.transcombd.com', 'tafsir.bashar@skf.transcombd.com', 'mohammad.nasir@skf.transcombd.com']
-    bcc = ['yakub@transcombd.com', 'rejaul.islam@transcombd.com']
+    # to = [email, '']
+    # cc = ['khalid@skf.transcombd.com', 'tafsir.bashar@skf.transcombd.com', 'mohammad.nasir@skf.transcombd.com']
+    # bcc = ['yakub@transcombd.com', 'tawhid@transcombd.com', 'zubair@transcombd.com', 'rejaul.islam@transcombd.com']
 
     recipient = to + cc + bcc
-    print('mail Sending to = ', email)
+    # print('mail Sending to = ', email)
 
-    subject = "SK+F Turkish Performance"
+    subject = "United Brand Performance"
 
     email_server_host = 'mail.transcombd.com'
     port = 25
@@ -56,6 +65,13 @@ def send_report(rsm, email):
     img.close()
     img1.add_header('Content-ID', '<img1>')
     msgRoot.attach(img1)
+
+    # # Total KPI
+    total_kpi_img = open("./Images/" + str(rsm) + "_total_kpi_images.png", 'rb')
+    total_kpi_img = MIMEImage(total_kpi_img.read())
+    total_kpi_img.add_header('Content-ID', '<total_kpi_img>')
+    msgRoot.attach(total_kpi_img)
+
     # # KPI Image
     kpi_img = open("./Images/kpi_image_" + str(rsm) + ".png", 'rb')
     kpi_img = MIMEImage(kpi_img.read())
@@ -108,23 +124,31 @@ def send_report(rsm, email):
 
     <br>
         <img src = "cid:img1" width="900"> 
+        <img src = "cid:total_kpi_img" width="900"> 
         <img src = "cid:kpi_img" width="900"> 
+        
+        <table style="width:900px">
+          <tr><th colspan='13' style=" background-color: #b2ff66; font-size: 20px; ">All: Sales Achievement % </th></tr>
+        
+                """ + st.rsm_Sales_achiv_data(rsm) + """</table>
+        <br>
 
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">""" + str(rsm) + """: Sales Trend % 
+        <tr><th colspan='13' style=" background-color: #b2ff66; font-size: 20px; ">""" + str(rsm) + """: Sales Trend % 
         </th></tr>
         
-               """ + st.Sales_table_data(rsm) + """</table>
+               """ + st.rsm_Sales_table_data(rsm) + """</table>
     <br>
 
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">""" + str(rsm) + """: Yesterday Seen Rx </th></tr>
+        <tr><th colspan='13' style=" background-color: #b2ff66; font-size: 20px; ">""" + str(rsm) + """: Yesterday 
+        Seen Rx </th></tr>
         
             """ + sr.seen_rx_table_data(rsm) + """</table>
     <br>
 
         <table style="width:900px">
-        <tr><th colspan='10' style=" background-color: #b2ff66; font-size: 20px; ">""" + str(rsm) + """: Yesterday 
+        <tr><th colspan='13' style=" background-color: #b2ff66; font-size: 20px; ">""" + str(rsm) + """: Yesterday 
         Doctor Call </th></tr>
         """ + dc.doctor_call_table_data(rsm) + """</table>
     
